@@ -1,0 +1,31 @@
+service: graphql-agronomics
+
+provider:
+  name: aws
+  region: ${opt:region, 'us-east-1'}
+  runtime: nodejs8.10
+  stage: ${opt:stage, 'local'}
+  apiKeys:
+    - graphql-agronomics-${self:provider.stage}-key
+
+functions:
+  graphql:
+    handler: src/handler.graphql
+    events:
+      - http:
+          path: graphql
+          method: any
+          cors: true
+          private: true
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    includeModules: true # enable auto-packing of external modules
+    packager: 'npm'
+  serverless-offline:
+    port: 3001
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
