@@ -11,11 +11,16 @@ const getUsers = (bid, auth) => {
   // auth
   const authToken = new Buffer(`${auth.user}:${auth.password}`).toString('base64');
 
+  const qs = {
+    'bid': bid,
+    'include_all_data': 1
+  };
+
   const headers = {
     'Authorization': `Basic ${authToken}`
   };
 
-  return fetch({ url: `${url}/Users?bid=${bid}`, headers: headers })
+  return fetch({ url: `${url}/Users`, qs: qs, headers: headers })
     .then(res => JSON.parse(res.body))
     .catch(err => err);
 };
